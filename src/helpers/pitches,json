@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Tereni 'Gool' Godimento",
+    "image": "godimento",
+    "time": "Od 15h do 23h",
+    "price_range": {
+      "min": 18,
+      "max": 24
+    },
+    "fields": 3
+  },
+  {
+    "name": "Tereni Rasadnik Vidici",
+    "image": "rasadnik",
+    "time": "Od 16h do 22h",
+    "price_range": {
+      "min": 24,
+      "max": 24
+    },
+    "fields": 1
+  },
+  {
+    "name": "Tereni Bilice",
+    "image": "bilice",
+    "time": "Od 16h do 23h",
+    "price": 32,
+    "fields": 1
+  },
+  {
+    "name": "Tereni Mandalina",
+    "image": "mandalina",
+    "time": "Od 15h do 23h",
+    "price_range": {
+      "min": 18,
+      "max": 32
+    },
+    "fields": 2
+  }
+]
