@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { Croatian } from "flatpickr/dist/l10n/hr";
@@ -18,6 +18,7 @@ import {
 
 const Reservation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [date, setDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -83,21 +84,29 @@ const Reservation = () => {
     fetchReservedSlots();
   }, [date]);
 
-  // Formatiranje datuma
-  const formatDate = (date) => {
+  // Formatiranje datuma u obliku "Ponedjeljak, 2024-08-19"
+  const formatDateWithDay = (date) => {
     const options = {
       weekday: "long",
       year: "numeric",
-      month: "long",
+      month: "numeric",
       day: "numeric",
     };
     return new Intl.DateTimeFormat("hr-HR", options).format(date);
   };
 
+  // Formatiranje datuma u obliku YYYY-MM-DD
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   // Prikaz informacija o odabranom terminu
   const getSelectedInfo = () => {
     if (date && selectedSlot) {
-      return `${formatDate(date[0])}, u ${selectedSlot}h`;
+      return `${formatDateWithDay(date[0])}, u ${selectedSlot}h`;
     }
     return "Odaberite datum i termin.";
   };
@@ -120,20 +129,26 @@ const Reservation = () => {
           userId: user.uid,
           userName: userData.lastName, // Možeš dodati i prezime ako želiš
           field: field,
-          date: formatDate(date[0]), // Spremamo formatirani datum
+          date: formatDate(date[0]), // Spremamo formatirani datum bez dana u tjednu
           slot: selectedSlot,
         }
       );
 
       alert("Rezervacija je uspješno spremljena!");
+      navigate("/pitches"); // Preusmjeravanje na pitches stranicu
     } catch (error) {
       console.error("Greška pri spremanju rezervacije:", error);
     }
   };
 
   // Filtriranje dostupnih termina
-  const getAvailableSlots = () => {
-    return availableSlots.filter((slot) => !reservedSlots.includes(slot));
+  const getSlotClass = (slot) => {
+    if (reservedSlots.includes(slot)) {
+      return "bg-red-400 text-white cursor-not-allowed"; // Stil za zauzete termine
+    }
+    return selectedSlot === slot
+      ? "bg-primary-0 text-white"
+      : "hover:bg-slate-400 hover:text-white";
   };
 
   return (
@@ -147,6 +162,7 @@ const Reservation = () => {
           <img
             className="w-full h-52 border rounded-md mb-2"
             src={field.image}
+            alt={field.name}
           />
           <h2 className="text-white text-lg font-semibold">{field.name}</h2>
           <p className="text-xs text-white">{field.description}</p>
@@ -170,15 +186,17 @@ const Reservation = () => {
           <div>
             <h2 className="text-xl font-semibold mb-3">Dostupni termini:</h2>
             <ul className="space-y-2">
-              {getAvailableSlots().map((slot, index) => (
+              {availableSlots.map((slot, index) => (
                 <li
                   key={index}
-                  className={`flex justify-center p-2 border rounded-lg shadow-sm cursor-pointer ${
-                    selectedSlot === slot
-                      ? "bg-primary-0 text-white"
-                      : "hover:bg-slate-400 hover:text-white"
-                  }`}
-                  onClick={() => setSelectedSlot(slot)}
+                  className={`flex justify-center p-2 border rounded-lg shadow-sm cursor-pointer ${getSlotClass(
+                    slot
+                  )}`}
+                  onClick={() => {
+                    if (!reservedSlots.includes(slot)) {
+                      setSelectedSlot(slot);
+                    }
+                  }}
                 >
                   {slot}
                 </li>

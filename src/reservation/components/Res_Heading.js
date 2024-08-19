@@ -23,7 +23,7 @@ const Res_Heading = () => {
   };
 
   return (
-    <div className="flex bg-white rounded-md mb-2 justify-between items-center shadow-md w-full px-10">
+    <div className="sticky top-0 z-50 flex bg-white rounded-md mb-2 justify-between items-center shadow-md w-full px-10">
       <img className="w-32" src={logo} alt="Logo" />
       <Link
         path
@@ -34,7 +34,7 @@ const Res_Heading = () => {
       </Link>
       <Link
         path
-        to="#"
+        to="/player"
         className=" text-lg text-primary-0 py-2 px-5 hover:bg-primary-0 hover:text-white rounded-md ease-in-out duration-300 delay-150"
       >
         Moj profil

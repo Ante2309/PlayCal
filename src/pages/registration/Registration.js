@@ -32,6 +32,7 @@ const Registration = () => {
         email: email,
         gender: gender,
         birthdate: birthdate,
+        displayName: firstName + " " + lastName,
       });
 
       console.log("Korisnik registriran i podaci spremljeni u Firestore");

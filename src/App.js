@@ -14,7 +14,7 @@ import Njivice from "./pages/player/home/pitches/components/Tereni Njivice/Njivi
 import Rasadnik from "./pages/player/home/pitches/components/Tereni Rasadnik Vidici/Rasadnik";
 import { AuthProvider } from "./firebase/auth/AuthProvider";
 import PrivateRoute from "./firebase/components/PrivateRoute";
-import { Player } from "./pages/player/Player";
+import Player from "./pages/player/Player";
 
 function App() {
   return (
