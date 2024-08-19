@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../../src/pages/head-foot/media/NOGOMETNI.png";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../firebase/context/AuthContext"; // Provjerite putanju do vašeg AuthProvider
 import { signOut } from "firebase/auth"; // Funkcija za odjavu iz Firebase-a
-import { auth } from "../../firebase/firebase"; // Vaš Firebase auth
+import { auth, db } from "../../firebase/firebase"; // Vaš Firebase auth i Firestore
+import { doc, getDoc } from "firebase/firestore"; // Dohvaćanje dokumenata iz Firestorea
 
 const Res_Heading = () => {
   const [menuOpen, setMenuOpen] = useState(false); // State za otvaranje/skrivanje izbornika
+  const [firstName, setFirstName] = useState(""); // State za pohranu korisničkog imena
   const { user } = useAuth(); // Dohvat trenutnog korisnika iz AuthContext
+
+  useEffect(() => {
+    // Funkcija za dohvaćanje korisničkog imena iz Firestore-a
+    const fetchFirstName = async () => {
+      if (user) {
+        try {
+          const userDocRef = doc(db, "users", user.uid); // Pretpostavljamo da je kolekcija "users"
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setFirstName(userData.firstName); // Postavljanje firstName
+          } else {
+            console.log("Nema podataka za ovog korisnika.");
+          }
+        } catch (error) {
+          console.error("Greška pri dohvaćanju korisničkog imena:", error);
+        }
+      }
+    };
+
+    fetchFirstName();
+  }, [user]);
 
   const toggleProfileMenu = () => {
     setMenuOpen(!menuOpen);
@@ -25,23 +50,26 @@ const Res_Heading = () => {
   return (
     <div className="sticky top-0 z-50 flex bg-white rounded-md mb-2 justify-between items-center shadow-md w-full px-10">
       <img className="w-32" src={logo} alt="Logo" />
-      <Link
-        path
-        to="/pitches"
-        className=" text-lg text-primary-0 py-2 px-5 hover:bg-primary-0 hover:text-white rounded-md ease-in-out duration-300 delay-150"
-      >
-        Tereni
-      </Link>
-      <Link
-        path
-        to="/player"
-        className=" text-lg text-primary-0 py-2 px-5 hover:bg-primary-0 hover:text-white rounded-md ease-in-out duration-300 delay-150"
-      >
-        Moj profil
-      </Link>
-      <div className="flex items-center space-x-2">
-        {user ? (
-          <div className="relative">
+      <div className="flex space-x-4">
+        <Link
+          to="/pitches"
+          className="text-lg text-primary-0 py-2 px-5 hover:bg-primary-0 hover:text-white rounded-md ease-in-out duration-300 delay-150"
+        >
+          Tereni
+        </Link>
+        <Link
+          to="/player"
+          className="text-lg text-primary-0 py-2 px-5 hover:bg-primary-0 hover:text-white rounded-md ease-in-out duration-300 delay-150"
+        >
+          Moj profil
+        </Link>
+      </div>
+      <div className="relative flex items-center">
+        {user && (
+          <>
+            <span className="text-lg text-primary-0 mr-2">
+              {`Pozdrav, ${firstName || "Korisnik"}`}
+            </span>
             <button
               className="rounded-full hover:text-white hover:scale-105 ease-in-out duration-300 delay-100 shadow-md"
               onClick={toggleProfileMenu}
@@ -60,17 +88,8 @@ const Res_Heading = () => {
               </svg>
             </button>
             {menuOpen && (
-              <div className="absolute font-teachers right-0 mt-2 w-48 bg-white shadow-md border border-primary-0 rounded-md z-50">
+              <div className="absolute font-teachers right-0 top-10 mt-2 w-48 bg-white shadow-md border border-primary-0 rounded-md z-50">
                 <div className="px-4 py-2 text-primary-0">
-                  <p className="font-semibold text-lg">{`Pozdrav, ${
-                    user.displayName || "Korisnik"
-                  }`}</p>
-                  <Link
-                    to="" // Putanja do stranice profila
-                    className="block px-4 py-2 text-sm hover:bg-gray-100"
-                  >
-                    Moj Profil
-                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
@@ -80,33 +99,7 @@ const Res_Heading = () => {
                 </div>
               </div>
             )}
-          </div>
-        ) : (
-          <div className="flex space-x-2">
-            <Link to="/login">
-              <button className="border-2 border-primary-0 hover:bg-primary-0 p-2 rounded-full ease-in-out duration-300 delay-100 shadow-md hover:scale-110">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="#2dd4bf"
-                  className="h-6 w-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-                  />
-                </svg>
-              </button>
-            </Link>
-            <Link to="/registration">
-              <button className="shadow-md bg-primary-0 text-white py-2 px-5 rounded-lg ease-in-out duration-300 delay-100 hover:scale-110 text-lg">
-                Registracija
-              </button>
-            </Link>
-          </div>
+          </>
         )}
       </div>
     </div>

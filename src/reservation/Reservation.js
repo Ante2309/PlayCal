@@ -113,6 +113,11 @@ const Reservation = () => {
 
   // Rukovanje rezervacijom
   const handleReservation = async () => {
+    if (!date || !selectedSlot) {
+      alert("Molimo odaberite datum i termin.");
+      return;
+    }
+
     if (!userData) {
       alert("Niste prijavljeni ili nema korisničkih podataka.");
       return;
@@ -197,6 +202,11 @@ const Reservation = () => {
                       setSelectedSlot(slot);
                     }
                   }}
+                  style={{
+                    pointerEvents: reservedSlots.includes(slot)
+                      ? "none"
+                      : "auto",
+                  }}
                 >
                   {slot}
                 </li>
@@ -214,6 +224,7 @@ const Reservation = () => {
           <button
             onClick={handleReservation}
             className="bg-primary-0 py-2 px-7 text-white font-semibold shadow-md rounded-lg ease-in-out duration-300 delay-100 hover:scale-110"
+            disabled={!date || !selectedSlot} // Onemogućavanje gumba ako nije odabran datum i slot
           >
             Rezerviraj
           </button>

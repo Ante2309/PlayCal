@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Res_Heading from "../../reservation/components/Res_Heading";
+import Res_Footer from "../../reservation/components/Res_Footer";
 import { auth, db } from "../../firebase/firebase";
 import {
   doc,
@@ -15,6 +16,8 @@ const Player = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [userData, setUserData] = useState(null);
   const [reservations, setReservations] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [reservationToDelete, setReservationToDelete] = useState(null);
 
   useEffect(() => {
     const fetchUserDataAndReservations = async () => {
@@ -49,16 +52,26 @@ const Player = () => {
     fetchUserDataAndReservations();
   }, []);
 
-  const handleDeleteReservation = async (reservationId) => {
+  const handleDeleteReservation = async () => {
     try {
-      await deleteDoc(doc(db, "reservations", reservationId));
+      await deleteDoc(doc(db, "reservations", reservationToDelete));
 
-      setReservations(reservations.filter((res) => res.id !== reservationId));
-
-      alert("Rezervacija je uspješno izbrisana!");
+      setReservations(
+        reservations.filter((res) => res.id !== reservationToDelete)
+      );
+      setShowModal(false); // Zatvori modal nakon brisanja
     } catch (error) {
       console.error("Greška pri brisanju rezervacije:", error);
     }
+  };
+
+  const openDeleteModal = (reservationId) => {
+    setReservationToDelete(reservationId);
+    setShowModal(true); // Otvori modal
+  };
+
+  const closeModal = () => {
+    setShowModal(false); // Zatvori modal bez brisanja
   };
 
   const renderContent = () => {
@@ -69,7 +82,7 @@ const Player = () => {
         return (
           <MyReservations
             reservations={reservations}
-            handleDelete={handleDeleteReservation}
+            openDeleteModal={openDeleteModal}
           />
         );
       default:
@@ -81,7 +94,7 @@ const Player = () => {
     <div>
       <Res_Heading />
       <div className="flex w-full h-screen">
-        <aside className="w-1/4 bg-gray-100 p-5 rounded-l-lg shadow-md font-teachers">
+        <aside className="w-1/4 bg-gray-100 p-5 rounded-l-lg shadow-md font-teachers mb-2">
           <ul className="space-y-2">
             <li>
               <button
@@ -110,10 +123,36 @@ const Player = () => {
           </ul>
         </aside>
 
-        <main className="w-3/4 p-10 bg-white rounded-r-lg shadow-md">
+        <main className="w-3/4 p-10 bg-white rounded-r-lg shadow-md mb-2">
           {renderContent()}
         </main>
       </div>
+      <Res_Footer />
+
+      {/* Modal za potvrdu brisanja */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-5 rounded-lg shadow-lg">
+            <h2 className="text-xl font-teachers mb-4">
+              Jeste li sigurni da želite izbrisati rezervaciju?
+            </h2>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleDeleteReservation}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
+              >
+                Da
+              </button>
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+              >
+                Ne
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -123,6 +162,11 @@ const ProfileInfo = ({ userData }) => {
   if (!userData) {
     return <p>Učitavanje podataka...</p>;
   }
+
+  // Provjera je li birthdate Firebase timestamp i pretvorba u Date objekt
+  const birthdate = userData.birthdate?.toDate
+    ? userData.birthdate.toDate()
+    : userData.birthdate;
 
   return (
     <div>
@@ -143,14 +187,16 @@ const ProfileInfo = ({ userData }) => {
       </p>
       <p>
         <strong>Datum Rođenja:</strong>{" "}
-        {new Date(userData.birthdate).toLocaleDateString()}
+        {birthdate instanceof Date
+          ? birthdate.toLocaleDateString("hr-HR")
+          : "Nepoznat datum"}
       </p>
     </div>
   );
 };
 
 // Komponenta za prikaz korisnikovih rezervacija
-const MyReservations = ({ reservations, handleDelete }) => {
+const MyReservations = ({ reservations, openDeleteModal }) => {
   if (reservations.length === 0) {
     return <p>Nemate rezervacija.</p>;
   }
@@ -174,11 +220,14 @@ const MyReservations = ({ reservations, handleDelete }) => {
                 <strong>Lokacija:</strong> {reservation.field.heading}
               </p>
               <p>
+                <strong>Teren:</strong> {reservation.field.name}
+              </p>
+              <p>
                 <strong>Vrijeme:</strong> {reservation.slot}
               </p>
             </div>
             <button
-              onClick={() => handleDelete(reservation.id)}
+              onClick={() => openDeleteModal(reservation.id)}
               className="ml-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
             >
               Izbriši rezervaciju
