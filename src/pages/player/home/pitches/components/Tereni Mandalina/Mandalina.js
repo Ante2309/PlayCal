@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import img1 from "./media/mandalina.png";
-import Res_Heading from "../../../../../../reservation/components/Res_Heading";
 import pitch_1 from "../../../media/pitch4.jpg";
 import pitch_2 from "./media/pitch_2.jpg";
+import Res_Heading from "../../../../../../reservation/components/Res_Heading";
 
 const Mandalina = () => {
   const fieldData = {
@@ -24,78 +24,57 @@ const Mandalina = () => {
   };
 
   return (
-    <div>
+    <div className="font-teachers bg-slate-200 min-h-screen">
       <Res_Heading />
-      <div className="bg-white p-10 rounded-lg shadow-md font-teachers w-full h-full pb-8">
-        <div className="flex flex-col justify-center items-center">
-          <h1 className=" text-slate-400 font-semibold text-4xl">
-            Nogometni Tereni Mandalina
+      <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+        <div className="text-center mb-8">
+          <h1 className="text-slate-700 font-bold text-4xl mb-4">
+            Nogometni tereni Mandalina
           </h1>
-          <img className="w-52 mt-3 mb-5" src={img1} />
-          <div className="grid grid-cols-2 gap-10 text-white">
-            <div className="p-10 bg-slate-600 rounded-lg shadow-md">
-              <div className="flex flex-col justify-center items-center">
-                <h2 className="font-semibold">{fieldData.field_1.name}</h2>
+          <img className="w-32 mx-auto" src={img1} alt="Mandalina Logo" />
+        </div>
+        <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-8">
+          {Object.keys(fieldData).map((key) => {
+            const field = fieldData[key];
+            return (
+              <div
+                key={key}
+                className="bg-slate-700 text-white rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105"
+              >
                 <img
-                  src={fieldData.field_1.image}
-                  className="w-full h-64 object-cover"
+                  src={field.image}
+                  alt={field.name}
+                  className="w-full h-48 object-cover"
                 />
-                <span className="text-xs my-2">
-                  {fieldData.field_1.description}
-                </span>
-                <span>
-                  Cijena termina:
-                  <span className=" font-extrabold">
-                    {" "}
-                    {fieldData.field_1.price}
-                  </span>
-                </span>
-                <Link to="/reservation" state={{ field: fieldData.field_1 }}>
-                  <button className=" bg-teal-400 py-2 px-10 rounded-sm hover:bg-teal-300">
-                    Rezerviraj teren
-                  </button>
-                </Link>
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold mb-2">{field.name}</h2>
+                  <p className="text-sm mb-3">{field.description}</p>
+                  <p className="text-lg font-bold mb-4">
+                    Cijena termina: <span>{field.price}</span>
+                  </p>
+                  <Link to="/reservation" state={{ field }}>
+                    <button className="bg-teal-500 hover:bg-teal-400 text-white py-2 px-4 rounded-md transition-colors">
+                      Rezerviraj teren
+                    </button>
+                  </Link>
+                </div>
               </div>
-            </div>
-            <div className="p-10 bg-slate-600 rounded-lg shadow-md">
-              <div className="flex flex-col justify-center items-center">
-                <h2 className="font-semibold">{fieldData.field_2.name}</h2>
-                <img
-                  src={fieldData.field_2.image}
-                  className="w-full h-64 object-cover"
-                />
-                <span className="text-xs my-2">
-                  {fieldData.field_2.description}
-                </span>
-                <span>
-                  Cijena termina:
-                  <span className=" font-extrabold">
-                    {" "}
-                    {fieldData.field_2.price}
-                  </span>
-                </span>
-                <Link to="/reservation" state={{ field: fieldData.field_2 }}>
-                  <button className=" bg-teal-400 py-2 px-10 rounded-sm hover:bg-teal-300">
-                    Rezerviraj teren
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
         <Link to="/pitches">
-          <button className=" flex items-center text-xs text-slate-400 hover:text-red-400 mt-7">
+          <button className="flex items-center text-slate-600 hover:text-red-500 mt-8">
             <svg
-              className="w-5"
+              className="w-5 h-5 mr-2"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 512"
             >
               <path
                 fill="none"
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="48"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="48"
                 d="M328 112L184 256l144 144"
               />
             </svg>
@@ -106,4 +85,5 @@ const Mandalina = () => {
     </div>
   );
 };
+
 export default Mandalina;

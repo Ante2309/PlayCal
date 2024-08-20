@@ -32,95 +32,48 @@ const Gool = () => {
   };
 
   return (
-    <div>
+    <div className="font-teachers bg-slate-200 min-h-screen">
       <Res_Heading />
-      <div className="font-teachers bg-white p-10 rounded-md shadow-md h-full w-full">
-        <div className="flex items-center justify-center">
-          <div className="flex flex-col justify-center items-center">
-            <h1 className="text-slate-400 font-semibold text-4xl">
-              Nogometni tereni Gool Šubićevac
-            </h1>
-            <img className="w-44 mt-3 mb-5" src={img_gool} alt="Gool Logo" />
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-10 text-white">
-              <div className="p-10 bg-slate-600 rounded-lg shadow-md md:col-span-2 lg:col-span-1">
-                <div className="flex flex-col justify-center items-center">
-                  <h2 className="font-semibold">{fieldData.field_1.name}</h2>
-                  <img
-                    src={fieldData.field_1.image}
-                    alt={fieldData.field_1.name}
-                    className="w-full h-44 object-cover"
-                  />
-                  <span className="text-xs my-2">
-                    {fieldData.field_1.description}
-                  </span>
-                  <span>
-                    Cijena termina:
-                    <span className="font-extrabold">
-                      {fieldData.field_1.price}
-                    </span>
-                  </span>
-                  <Link to="/reservation" state={{ field: fieldData.field_1 }}>
-                    <button className="bg-teal-400 px-9 py-3 rounded-sm hover:bg-teal-300 text-md">
+      <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+        <div className="text-center mb-8">
+          <h1 className="text-slate-700 font-bold text-4xl mb-4">
+            Nogometni tereni Gool Šubićevac
+          </h1>
+          <img className="w-32 mx-auto" src={img_gool} alt="Gool Logo" />
+        </div>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
+          {Object.keys(fieldData).map((key) => {
+            const field = fieldData[key];
+            return (
+              <div
+                key={key}
+                className="bg-slate-700 text-white rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105"
+              >
+                <img
+                  src={field.image}
+                  alt={field.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold mb-2">{field.name}</h2>
+                  <p className="text-sm mb-3">{field.description}</p>
+                  <p className="text-lg font-bold mb-4">
+                    Cijena termina: <span>{field.price}</span>
+                  </p>
+                  <Link to="/reservation" state={{ field }}>
+                    <button className="bg-teal-500 hover:bg-teal-400 text-white py-2 px-4 rounded-md transition-colors">
                       Rezerviraj teren
                     </button>
                   </Link>
                 </div>
               </div>
-              <div className="p-10 bg-slate-600 rounded-lg shadow-md">
-                <div className="flex flex-col justify-center items-center">
-                  <h2 className="font-semibold">{fieldData.field_2.name}</h2>
-                  <img
-                    src={fieldData.field_2.image}
-                    alt={fieldData.field_2.name}
-                    className="w-full h-44 object-cover"
-                  />
-                  <span className="text-xs my-2">
-                    {fieldData.field_2.description}
-                  </span>
-                  <span>
-                    Cijena termina:
-                    <span className="font-extrabold">
-                      {fieldData.field_2.price}
-                    </span>
-                  </span>
-                  <Link to="/reservation" state={{ field: fieldData.field_2 }}>
-                    <button className="bg-teal-400 px-9 py-3 rounded-sm hover:bg-teal-300 text-md">
-                      Rezerviraj teren
-                    </button>
-                  </Link>
-                </div>
-              </div>
-              <div className="p-10 bg-slate-600 rounded-lg shadow-md">
-                <div className="flex flex-col justify-center items-center">
-                  <h2 className="font-semibold">{fieldData.field_3.name}</h2>
-                  <img
-                    src={fieldData.field_3.image}
-                    alt={fieldData.field_3.name}
-                    className="w-full h-44 object-cover"
-                  />
-                  <span className="text-xs my-2">
-                    {fieldData.field_3.description}
-                  </span>
-                  <span>
-                    Cijena termina:
-                    <span className="font-extrabold">
-                      {fieldData.field_3.price}
-                    </span>
-                  </span>
-                  <Link to="/reservation" state={{ field: fieldData.field_3 }}>
-                    <button className="bg-teal-400 px-9 py-3 rounded-sm hover:bg-teal-300 text-md">
-                      Rezerviraj teren
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
         <Link to="/pitches">
-          <button className="flex items-center text-xs text-slate-400 hover:text-red-400 mt-7">
+          <button className="flex items-center text-slate-600 hover:text-red-500 mt-8">
             <svg
-              className="w-4"
+              className="w-5 h-5 mr-2"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 512"
             >
