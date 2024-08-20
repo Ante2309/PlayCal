@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from "react";
 import logo from "../../../src/pages/head-foot/media/NOGOMETNI.png";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../firebase/context/AuthContext"; // Provjerite putanju do vašeg AuthProvider
+import { Link, useNavigate } from "react-router-dom"; // Uvoz useNavigate
+import { useAuth } from "../../firebase/context/AuthContext";
 import { signOut } from "firebase/auth"; // Funkcija za odjavu iz Firebase-a
-import { auth, db } from "../../firebase/firebase"; // Vaš Firebase auth i Firestore
+import { auth, db } from "../../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore"; // Dohvaćanje dokumenata iz Firestorea
 
 const Res_Heading = () => {
   const [menuOpen, setMenuOpen] = useState(false); // State za otvaranje/skrivanje izbornika
   const [firstName, setFirstName] = useState(""); // State za pohranu korisničkog imena
   const { user } = useAuth(); // Dohvat trenutnog korisnika iz AuthContext
+  const navigate = useNavigate(); // Inicijalizacija useNavigate za preusmjeravanje
 
   useEffect(() => {
     // Funkcija za dohvaćanje korisničkog imena iz Firestore-a
     const fetchFirstName = async () => {
       if (user) {
         try {
-          const userDocRef = doc(db, "users", user.uid); // Pretpostavljamo da je kolekcija "users"
+          const userDocRef = doc(db, "users", user.uid);
           const userDoc = await getDoc(userDocRef);
 
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setFirstName(userData.firstName); // Postavljanje firstName
+            setFirstName(userData.firstName);
           } else {
             console.log("Nema podataka za ovog korisnika.");
           }
@@ -42,6 +43,7 @@ const Res_Heading = () => {
     try {
       await signOut(auth);
       console.log("Korisnik je odjavljen");
+      navigate("/login"); // Preusmjeravanje na stranicu za prijavu
     } catch (error) {
       console.error("Greška pri odjavi:", error);
     }

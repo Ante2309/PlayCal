@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import img_rasadnik from "./media/rasadnik.png";
 import Res_Heading from "../../../../../../reservation/components/Res_Heading";
+import pitch from "../../../media/pitch2.jpg";
 
 const Rasadnik = () => {
   const fieldData = {
@@ -9,7 +10,7 @@ const Rasadnik = () => {
     name: "Teren br. 1",
     price: "24€",
     description: "*Teren pogodan za igru 4x4",
-    image: {},
+    image: pitch,
   };
 
   return (
@@ -25,7 +26,10 @@ const Rasadnik = () => {
             <div className="p-10 bg-slate-600 rounded-lg shadow-md">
               <div className="flex flex-col justify-center items-center">
                 <h2 className="font-semibold">{fieldData.name}</h2>
-                <img className="w-52 h-44 object-cover" />
+                <img
+                  src={fieldData.image}
+                  className="w-full h-64 object-cover"
+                />
                 <span className="text-xs my-2">{fieldData.description}</span>
                 <span>
                   Cijena termina:

@@ -165,7 +165,7 @@ const Reservation = () => {
             {field.heading}
           </h1>
           <img
-            className="w-full h-52 border rounded-md mb-2"
+            className="w-full h-64 border rounded-md mb-2 object-cover"
             src={field.image}
             alt={field.name}
           />

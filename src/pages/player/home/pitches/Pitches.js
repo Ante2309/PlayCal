@@ -3,6 +3,7 @@ import godimento from "../media/pitch1.jpg";
 import rasadnik from "../media/pitch2.jpg";
 import bilice from "../media/pitch3.jpg";
 import mandalina from "../media/pitch4.jpg";
+import njivice from "./components/Tereni Njivice/media/mand.jpg";
 import { Link } from "react-router-dom";
 import Footer from "../../../head-foot/Footer";
 import Res_Heading from "../../../../reservation/components/Res_Heading";
@@ -127,7 +128,7 @@ const Pitches = () => {
             </h2>
             <img
               className="w-full h-72 object-cover rounded-t-lg"
-              src={rasadnik}
+              src={njivice}
             />
             <span className="text-slate-400 text-md font-thin my-3">
               Vrijeme igranja: Od 16h do 22h

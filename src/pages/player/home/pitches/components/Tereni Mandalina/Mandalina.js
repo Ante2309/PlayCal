@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import img1 from "./media/mandalina.png";
 import Res_Heading from "../../../../../../reservation/components/Res_Heading";
+import pitch_1 from "../../../media/pitch4.jpg";
+import pitch_2 from "./media/pitch_2.jpg";
+
 const Mandalina = () => {
   const fieldData = {
     field_1: {
@@ -9,14 +12,14 @@ const Mandalina = () => {
       name: "Teren br.1",
       price: "36€",
       description: "*Teren pogodan za igru 5+1",
-      image: {},
+      image: pitch_1,
     },
     field_2: {
       heading: "Nogometni tereni Mandalina",
       name: "Teren br.2",
       price: "18€",
       description: "*Teren pogodan za igru 3x3",
-      image: {},
+      image: pitch_2,
     },
   };
 
@@ -33,7 +36,10 @@ const Mandalina = () => {
             <div className="p-10 bg-slate-600 rounded-lg shadow-md">
               <div className="flex flex-col justify-center items-center">
                 <h2 className="font-semibold">{fieldData.field_1.name}</h2>
-                <img className="w-52 h-44 object-cover" />
+                <img
+                  src={fieldData.field_1.image}
+                  className="w-full h-64 object-cover"
+                />
                 <span className="text-xs my-2">
                   {fieldData.field_1.description}
                 </span>
@@ -54,7 +60,10 @@ const Mandalina = () => {
             <div className="p-10 bg-slate-600 rounded-lg shadow-md">
               <div className="flex flex-col justify-center items-center">
                 <h2 className="font-semibold">{fieldData.field_2.name}</h2>
-                <img className="w-52 h-44 object-cover" />
+                <img
+                  src={fieldData.field_2.image}
+                  className="w-full h-64 object-cover"
+                />
                 <span className="text-xs my-2">
                   {fieldData.field_2.description}
                 </span>
