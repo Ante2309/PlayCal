@@ -22,7 +22,7 @@ const Rasadnik = () => {
             {fieldData.heading}
           </h1>
           <img
-            className="w-40 mx-auto mb-6"
+            className="w-60 mx-auto mb-6"
             src={img_rasadnik}
             alt="Rasadnik"
           />

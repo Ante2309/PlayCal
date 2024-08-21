@@ -34,12 +34,12 @@ const Gool = () => {
   return (
     <div className="font-teachers bg-slate-200 min-h-screen">
       <Res_Heading />
-      <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+      <div className="mx-auto h-full p-8 bg-white rounded-lg shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-slate-700 font-bold text-4xl mb-4">
             Nogometni tereni Gool Šubićevac
           </h1>
-          <img className="w-32 mx-auto" src={img_gool} alt="Gool Logo" />
+          <img className="w-52 mx-auto" src={img_gool} alt="Gool Logo" />
         </div>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
           {Object.keys(fieldData).map((key) => {

@@ -21,7 +21,7 @@ const Njivice = () => {
           <h1 className="text-slate-700 font-bold text-4xl mb-4">
             {fieldData.heading}
           </h1>
-          <img className="w-40 mx-auto mb-6" src={img1} alt="Njivice" />
+          <img className="w-52 mx-auto mb-6" src={img1} alt="Njivice" />
         </div>
         <div className="bg-slate-700 text-white rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105">
           <img

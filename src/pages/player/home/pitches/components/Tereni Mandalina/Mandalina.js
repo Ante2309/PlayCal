@@ -26,12 +26,12 @@ const Mandalina = () => {
   return (
     <div className="font-teachers bg-slate-200 min-h-screen">
       <Res_Heading />
-      <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+      <div className="mx-auto p-8 bg-white rounded-lg shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-slate-700 font-bold text-4xl mb-4">
             Nogometni tereni Mandalina
           </h1>
-          <img className="w-32 mx-auto" src={img1} alt="Mandalina Logo" />
+          <img className="w-52 mx-auto" src={img1} alt="Mandalina Logo" />
         </div>
         <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-8">
           {Object.keys(fieldData).map((key) => {
