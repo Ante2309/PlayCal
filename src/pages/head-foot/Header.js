@@ -1,14 +1,41 @@
-import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import logo from "./media/NOGOMETNI.png";
 import { useAuth } from "../../firebase/context/AuthContext"; // Provjerite putanju do vašeg AuthProvider
 import { signOut } from "firebase/auth"; // Funkcija za odjavu iz Firebase-a
-import { auth } from "../../firebase/firebase"; // Vaš Firebase auth
+import { auth, db } from "../../firebase/firebase"; // Vaš Firebase auth i Firestore
+import { doc, getDoc } from "firebase/firestore"; // Dohvaćanje dokumenata iz Firestorea
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // State za otvaranje/skrivanje izbornika
+  const [firstName, setFirstName] = useState(""); // State za pohranu korisničkog imena
   const { user } = useAuth(); // Dohvat trenutnog korisnika iz AuthContext
+
+  useEffect(() => {
+    const fetchFirstName = async () => {
+      if (user) {
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setFirstName(userData.firstName || "Korisnik");
+          } else {
+            setFirstName("Korisnik");
+          }
+        } catch (error) {
+          console.error("Greška pri dohvaćanju korisničkog imena:", error);
+          setFirstName("Korisnik");
+        }
+      } else {
+        setFirstName("Korisnik");
+      }
+    };
+
+    fetchFirstName();
+  }, [user]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -22,6 +49,7 @@ const Header = () => {
     try {
       await signOut(auth);
       console.log("Korisnik je odjavljen");
+      // Možete dodati preusmjeravanje ako želite nakon odjave
     } catch (error) {
       console.error("Greška pri odjavi:", error);
     }
@@ -94,20 +122,18 @@ const Header = () => {
                   className="w-10"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
               </button>
               {menuOpen && (
                 <div className="absolute font-teachers right-0 mt-2 w-48 bg-white shadow-md border border-primary-0 rounded-md">
                   <div className="px-4 py-2 text-primary-0">
-                    <p className="font-semibold text-lg">{`Pozdrav, ${
-                      user.displayName || "Korisnik"
-                    }`}</p>
+                    <p className="font-semibold text-lg">{`Pozdrav, ${firstName}`}</p>
                     <Link
-                      to="" // Putanja do stranice profila
+                      to="/player" // Putanja do stranice profila
                       className="block px-4 py-2 text-sm hover:bg-gray-100"
                     >
                       Moj Profil
